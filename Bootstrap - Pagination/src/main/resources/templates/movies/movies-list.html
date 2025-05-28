@@ -82,11 +82,27 @@
         <div class="pagination">
             <form>
 
+<!--                perserving my filtering-->
+
+                <input type="hidden" name="title" th:value="${title}">
+                <input type="hidden" name="startYear" th:value="${startYear}">
+                <input type="hidden" name="endYear" th:value="${endYear}">
+                <input type="hidden" name="directorName" th:value="${directorName}">
+
+
                 <button class="btn btn-outline-success" name="page" th:value="0" th:disabled="${!hasPrevious}">first page</button>
                 <button class="btn btn-outline-primary" name="page" th:value="${currentPage - 1}" th:disabled="${!hasPrevious}">Previous</button>
                 <p th:text="'Page ' + ${currentPage + 1} + ' of ' + ${moviePage.totalPages}"></p>
                 <button class="btn btn-outline-primary" name="page" th:value=" ${currentPage + 1}" th:disabled="${!hasNext}">Next</button>
                 <button class="btn btn-outline-primary" name="page" th:value=" ${moviePage.totalPages -1}" th:disabled="${!hasNext}" th:text="'...' + ${moviePage.totalPages}"></button>
+
+                <select name="size" id="size" class="form-control">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+
+
 <!--                looping if we are on the last page-->
 <!--                <button class="btn btn-outline-primary" name="page" th:value="${hasNext} ? ${currentPage + 1} : 0">Next</button>-->
 

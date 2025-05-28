@@ -99,13 +99,13 @@ public class MovieService {
     }
 
 
-    public Page<Movie> searchMovies(String title, Integer startYear, Integer endYear, String directorName, int page){
+    public Page<Movie> searchMovies(String title, Integer startYear, Integer endYear, String directorName, int page, int size){
         Specification<Movie> specification = Specification.where(MovieSpecification.titleContains(title))
                 .and(MovieSpecification.releaseYearBetween(startYear,endYear))
                 .and(MovieSpecification.directorNameContains(directorName));
 
 //        step 1: create a pageable object
-        Pageable pageable = PageRequest.of(page,10, Sort.by("title").ascending());
+        Pageable pageable = PageRequest.of(page,size, Sort.by("title").ascending());
 //        step 2: add the pageable to the findAll()
         return movieRepository.findAll(specification,pageable);
     }

@@ -52,8 +52,9 @@ public class MovieController {
                              @RequestParam(required = false) Integer endYear,
                              @RequestParam(required = false) String directorName,
                              @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "10") int size,
                              Model model){
-        Page<Movie> moviePage = movieService.searchMovies(title,startYear,endYear,directorName,page);
+        Page<Movie> moviePage = movieService.searchMovies(title,startYear,endYear,directorName,page,size);
 
 //        addtributes for pagination
         model.addAttribute("moviePage",moviePage);
