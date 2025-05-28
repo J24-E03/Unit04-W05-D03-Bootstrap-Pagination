@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Authors List</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style th:replace="~{fragments/fragment :: base-style}"></style>
+    <style>
+        .author {
+            background-color: #f0f0f0;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .author p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            color: #222;
+        }
+
+        .author strong {
+            color: #444;
+        }
+
+        .author hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin-top: 1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .action-buttons form button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .update-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .books-list {
+            list-style-type: disc;
+            padding-left: 30px;
+            font-style: italic;
+            margin-top: 0;
+        }
+
+        .books-list li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/fragment :: navbar}"></div>
+<div class="content">
+    <h1>Authors List</h1>
+
+    <div th:each="author : ${authors}" class="author">
+        <p><strong>Name:</strong> <span th:text="${author.name}"></span></p>
+        <p><strong>Id:</strong> <span th:text="${author.id}"></span></p>
+        <p><strong>bio:</strong> <span th:text="${author.bio}"></span></p>
+        <div>
+            <p><strong>Books:</strong></p>
+            <ul class="books-list">
+                <li th:each="book : ${author.books}" th:text="${book.title}"></li>
+            </ul>
+        </div>
+        <div class="action-buttons">
+            <form th:action="@{/authors/{id}(id=${author.id})}" method="get">
+                <button type="submit" class="update-btn">Update</button>
+            </form>
+            <form th:action="@{/authors/delete/{id}(id=${author.id})}" method="post">
+                <button type="submit" class="delete-btn">Delete</button>
+            </form>
+        </div>
+        <hr/>
+    </div>
+</div>
+
+
+<footer>
+    <div th:replace="~{fragments/fragment :: footer}"></div>
+</footer>
+
+</body>
+</html>

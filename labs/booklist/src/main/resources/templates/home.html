@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookstore</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <style th:replace="~{fragments/fragment :: base-style}"></style>
+</head>
+
+<body>
+<div th:replace="~{fragments/fragment :: navbar}"></div>
+
+<div class="content">
+    <h1>Welcome to Bookstore</h1>
+    <a th:href="@{/books}">Click here to view the List of Books</a>
+</div>
+
+<footer>
+    <div th:replace="~{fragments/fragment :: footer}"></div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Books</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style th:replace="~{fragments/fragment :: base-style}"></style>
+    <style>
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .filters label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .filters input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .filters button {
+            padding: 6px 12px;
+            background-color: #0b6c4b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        .filters button:hover {
+            background-color: #095b3e;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .action-buttons form button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .view-btn {
+            background-color: #0b6c4b;
+            color: white;
+        }
+
+        .update-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/fragment :: navbar}"></div>
+
+<div class="content">
+    <h1>Book List</h1>
+
+    <form method="get" th:action="@{/books}">
+        <div class="filters">
+            <label for="title">Title: </label>
+            <input type="text" id="title" name="title" th:value="${title}">
+
+            <label for="author">Author: </label>
+            <input id="author" name="author" th:value="${author}">
+
+            <label for="publisher">Publisher: </label>
+            <input type="text" id="publisher" name="publisher" th:value="${publisher}">
+
+            <label for="price">Price: </label>
+            <input type="number" id="price" name="price" th:value="${price}">
+
+            <label for="inStock">In Stock: </label>
+            <input type="checkbox" id="inStock" name="inStock"  th:checked="${inStock != null and inStock}">
+
+            <label for="startYear">Start Year: </label>
+            <input type="number" id="startYear" name="startYear" th:value="${startYear}">
+
+            <label for="endYear">End Year: </label>
+            <input type="number" id="endYear" name="endYear" th:value="${endYear}">
+
+            <button type="submit">Filter</button>
+        </div>
+    </form>
+
+    <div th:each="book : ${books}"
+         class="book"
+         th:classappend="${book.inStock} ? ' in-stock' : ' out-of-stock'">
+        <p><strong>Title:</strong> <span th:text="${book.title}"></span></p>
+        <p><strong>Price:</strong> €<span th:text="${book.price}"></span></p>
+        <p th:if="${book.inStock}">In Stock</p>
+        <p th:unless="${book.inStock}">Out of Stock</p>
+        <div class="action-buttons">
+            <div>
+                <form th:action="@{books/{id}(id=${book.id})}" method="get">
+                    <button type="submit" class="view-btn">View Details</button>
+                </form>
+            </div>
+            <form th:action="@{/books/update/{id}(id=${book.id})}" method="get">
+                <button type="submit" class="update-btn">Update</button>
+            </form>
+            <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post">
+                <button type="submit" class="delete-btn">Delete</button>
+            </form>
+        </div>
+        <hr/>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>
