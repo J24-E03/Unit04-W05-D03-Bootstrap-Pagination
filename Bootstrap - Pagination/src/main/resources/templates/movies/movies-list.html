@@ -61,7 +61,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="movie :  ${moviesgit }">
+                <tr th:each="movie :  ${movies}">
                     <td th:text="${movie.title}">Title</td>
                     <td th:text="${movie.releaseYear}">Year</td>
                     <td th:text="${movie.language}">Lang</td>
@@ -80,7 +80,7 @@
 
 
     <a href="/movies/generate" target="_blank">
-        <button>Download Movies as PDF</button>
+        <button class=" my-3 btn btn-success">Download Movies as PDF</button>
     </a>
 
 </body>
