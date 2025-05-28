@@ -11,6 +11,7 @@ import com.dci.full_mvc.service.PdfService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -50,10 +51,18 @@ public class MovieController {
                              @RequestParam(required = false) Integer startYear,
                              @RequestParam(required = false) Integer endYear,
                              @RequestParam(required = false) String directorName,
+                             @RequestParam(defaultValue = "0") int page,
                              Model model){
-        List<Movie> movies = movieService.searchMovies(title,startYear,endYear,directorName);
+        Page<Movie> moviePage = movieService.searchMovies(title,startYear,endYear,directorName,page);
 
-        model.addAttribute("movies",movies);
+//        addtributes for pagination
+        model.addAttribute("moviePage",moviePage);
+        model.addAttribute("currentPage",page);
+        model.addAttribute("hasPrevious",moviePage.hasPrevious());
+        model.addAttribute("hasNext",moviePage.hasNext());
+
+
+//        attributes for searching and filtering
         model.addAttribute("title",title);
         model.addAttribute("startYear",startYear);
         model.addAttribute("endYear",endYear);

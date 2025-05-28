@@ -50,6 +50,7 @@ public class FullMvcApplication implements CommandLineRunner {
 
 //		System.out.println(movieService.searchMovies(null,null,null));
 
+//		System.out.println(movieService.searchMovies(null,null,null,null,2).getContent().size());
 
 	}
 

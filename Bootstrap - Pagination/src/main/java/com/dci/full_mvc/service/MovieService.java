@@ -12,6 +12,10 @@ import com.dci.full_mvc.repository.MovieRepository;
 import com.dci.full_mvc.specification.MovieSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,13 +99,15 @@ public class MovieService {
     }
 
 
-    public List<Movie> searchMovies(String title, Integer startYear, Integer endYear, String directorName){
+    public Page<Movie> searchMovies(String title, Integer startYear, Integer endYear, String directorName, int page){
         Specification<Movie> specification = Specification.where(MovieSpecification.titleContains(title))
                 .and(MovieSpecification.releaseYearBetween(startYear,endYear))
                 .and(MovieSpecification.directorNameContains(directorName));
 
-
-        return movieRepository.findAll(specification);
+//        step 1: create a pageable object
+        Pageable pageable = PageRequest.of(page,10, Sort.by("title").ascending());
+//        step 2: add the pageable to the findAll()
+        return movieRepository.findAll(specification,pageable);
     }
 
 
