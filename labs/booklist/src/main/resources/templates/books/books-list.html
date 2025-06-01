@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List of Books</title>
     <link rel="stylesheet" href="/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+
     <style th:replace="~{fragments/fragment :: base-style}"></style>
     <style>
         .filters {
@@ -105,7 +107,7 @@
         </div>
     </form>
 
-    <div th:each="book : ${books}"
+    <div th:each="book : ${bookPage}"
          class="book"
          th:classappend="${book.inStock} ? ' in-stock' : ' out-of-stock'">
         <p><strong>Title:</strong> <span th:text="${book.title}"></span></p>
@@ -126,6 +128,41 @@
             </form>
         </div>
         <hr/>
+    </div>
+
+    <div class="pagination">
+        <form method="get" th:action="@{/books}">
+            <input type="hidden" name="title" th:value="${title}">
+            <input type="hidden" name="author" th:value="${author}">
+            <input type="hidden" name="publisher" th:value="${publisher}">
+            <input type="hidden" name="genre" th:value="${genre}">
+            <input type="hidden" name="price" th:value="${price}">
+            <input type="hidden" name="startYear" th:value="${startYear}">
+            <input type="hidden" name="endYear" th:value="${endYear}">
+            <input type="hidden" name="inStock" th:value="${inStock}">
+            <ul class="pagination">
+                <li th:classappend="${!hasPrevious} ? 'disabled'">
+                    <button class="page-link" name="page" value="0">First</button>
+                </li>
+
+                <li class="page-item" th:classappend="${!hasPrevious} ? 'disabled'">
+                    <button class="page-link" name="page" th:value="${currentPage - 1}">Previous</button>
+                </li>
+
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, bookPage.totalPages - 1)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <button class="page-link" name="page" th:value="${i}" th:text="${i + 1}">1</button>
+                </li>
+
+                <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
+                    <button class="page-link" name="page" th:value="${currentPage + 1}">Next</button>
+                </li>
+
+                <li class="page-item" th:classappend="${!hasNext} ? 'disabled'">
+                    <button class="page-link" name="page" th:value="${bookPage.totalPages - 1}">Last</button>
+                </li>
+            </ul>
+        </form>
     </div>
 </div>
 

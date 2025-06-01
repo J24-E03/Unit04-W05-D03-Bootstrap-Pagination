@@ -8,10 +8,13 @@ import com.example.booklist.repository.BookRepository;
 import com.example.booklist.repository.PublisherRepository;
 import com.example.booklist.specification.BookSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -102,16 +105,18 @@ public class BookService {
                 .orElseThrow(() -> new ResourceNotFound("Book not found"));
     }
 
-    public List<Book> searchBooks(String title, String author, String publisher,
+    public Page<Book> searchBooks(String title, String author, String publisher,
                                   Boolean inStock, Integer startYear,
-                                  Integer endYear, String genre, Double price) {
+                                  Integer endYear, String genre, Double price, int page, int size) {
 
         Specification<Book> specification = Specification.where(BookSpecification.byTitleContains(title)
                 .and(BookSpecification.byAuthor(author).and(BookSpecification.byPublisherNameContains(publisher))
                         .and(BookSpecification.byGenre(genre).and(BookSpecification.byInStock(inStock))
                                 .and(BookSpecification.byYearBetween(startYear, endYear)).and(BookSpecification.byPriceLessThan(price)))));
 
-        return bookRepository.findAll(specification);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
+
+        return bookRepository.findAll(specification, pageable);
 
 
 

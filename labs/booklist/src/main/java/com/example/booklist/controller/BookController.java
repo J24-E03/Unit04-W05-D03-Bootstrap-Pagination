@@ -5,9 +5,9 @@ import com.example.booklist.service.AuthorService;
 import com.example.booklist.service.BookService;
 import com.example.booklist.service.GenreService;
 import com.example.booklist.service.PublisherService;
-import com.example.booklist.specification.BookSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,9 +34,17 @@ public class BookController {
             @RequestParam(required = false) Integer startYear,
             @RequestParam(required = false) Integer endYear,
                            @RequestParam(required = false) Double price,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "10") int size,
                            Model model) {
-        List<Book> books = bookService.searchBooks(title, author, publisher, inStock, startYear, endYear, genre, price);
-        model.addAttribute("books", books);
+        Page<Book> bookPage = bookService.searchBooks(title, author, publisher, inStock, startYear, endYear, genre, price, page, size);
+
+        model.addAttribute("bookPage", bookPage);
+        model.addAttribute("currentPage",page);
+        model.addAttribute("hasPrevious",bookPage.hasPrevious());
+        model.addAttribute("hasNext",bookPage.hasNext());
+        model.addAttribute("size",size);
+
         model.addAttribute("title", title);
         model.addAttribute("author", author);
         model.addAttribute("publisher", publisher);
