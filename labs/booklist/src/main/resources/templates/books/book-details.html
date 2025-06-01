@@ -1,94 +1,54 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>Book Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <style th:replace="~{fragments/fragment :: base-style}"></style>
-    <link rel="stylesheet" href="/styles.css">
-
-    <style>
-        .publishers-list {
-            list-style-type: disc;
-            padding-left: 20px;
-            margin: 5px 0;
-            font-style: italic;
-        }
-
-        .authors-list {
-            list-style-type: disc;
-            padding-left: 20px;
-            margin: 5px 0;
-            font-style: italic;
-        }
-
-        .authors-list li {
-            margin-bottom: 8px;
-        }
-
-        .publishers-list li {
-            margin-bottom: 8px;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .action-buttons form button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .update-btn {
-            background-color: #3498db;
-            color: white;
-        }
-
-        .delete-btn {
-            background-color: #e74c3c;
-            color: white;
-        }
-    </style>
 </head>
 <body>
+
 <div th:replace="~{fragments/fragment :: navbar}"></div>
 
-<div class="content">
-    <div class="book"
-         th:classappend="${book.inStock} ? ' in-stock' : ' out-of-stock'">
-        <h2 th:text="${book.title}"></h2>
-        <div>
-            <p><strong>Authors:</strong></p>
-            <ul class="authors-list">
-                <li th:each="author : ${book.authors}" th:text="${author.name}"></li>
-            </ul>
-        </div>
-        <div>
-            <p><strong>Publishers:</strong></p>
-            <ul class="publishers-list">
-                <li th:each="publisher : ${book.publishers}" th:text="${publisher.name}"></li>
-            </ul>
-        </div>
-        <p><strong>Year:</strong> <span th:text="${book.year}"></span></p>
-        <p><strong>Genre:</strong> <span th:text="${book.genre.name}"></span></p>
-        <p><strong>Price:</strong> <span th:text="${book.inStock} ? '€' + ${book.price} : 'out-of-stock'"></span></p>
+<div class="container mt-5">
+    <div class="card shadow" th:classappend="${book.inStock} ? ' border-success' : ' border-danger'">
+        <div class="card-body">
+            <h2 class="card-title" th:text="${book.title}">Book Title</h2>
 
-        <div class="action-buttons">
-            <form th:action="@{/books/update/{id}(id=${book.id})}" method="get">
-                <button type="submit" class="update-btn">Update</button>
-            </form>
-            <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post">
-                <button type="submit" class="delete-btn">Delete</button>
-            </form>
-        </div>
+            <div class="mb-3">
+                <p class="fw-bold mb-1">Authors:</p>
+                <ul class="ms-3 fst-italic">
+                    <li th:each="author : ${book.authors}" th:text="${author.name}"></li>
+                </ul>
+            </div>
 
+            <div class="mb-3">
+                <p class="fw-bold mb-1">Publishers:</p>
+                <ul class="ms-3 fst-italic">
+                    <li th:each="publisher : ${book.publishers}" th:text="${publisher.name}"></li>
+                </ul>
+            </div>
+
+            <p><strong>Year:</strong> <span th:text="${book.year}"></span></p>
+            <p><strong>Genre:</strong> <span th:text="${book.genre.name}"></span></p>
+            <p>
+                <strong>Price:</strong>
+                <span th:if="${book.inStock}" class="text-success fw-semibold">€<span th:text="${book.price}"></span></span>
+                <span th:if="${!book.inStock}" class="text-danger fw-semibold">Out of stock</span>
+            </p>
+
+            <div class="d-flex gap-2 mt-4">
+                <form th:action="@{/books/update/{id}(id=${book.id})}" method="get">
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </form>
+                <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
